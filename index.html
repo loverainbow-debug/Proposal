@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>A Special Question 🌻</title>
+<style>
+:root{
+  --bg1:#fff7ed;
+  --bg2:#fff3c9;
+  --accent:#f6b93b;
+  --text:#5b3a2e;
+  --card:rgba(255,255,255,0.7);
+  --shadow:0 8px 30px rgba(91,58,46,0.12);
+  --btn-grad:linear-gradient(135deg,#ffd86b 0%,#ffde86 100%);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+
+html,body{
+  height:100%;
+  margin:0;
+  background:radial-gradient(1200px 600px at 10% 10%,#fffaf0 0%,transparent 15%),
+             radial-gradient(900px 500px at 90% 90%,#fff3d6 0%,transparent 12%),
+             linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+.center{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+  box-sizing:border-box;
+}
+
+.card{
+  background:var(--card);
+  backdrop-filter:blur(6px) saturate(110%);
+  border-radius:28px;
+  padding:56px 64px;
+  box-shadow:var(--shadow);
+  text-align:center;
+  border:1px solid rgba(255,255,255,0.6);
+  max-width:1000px;
+  width:100%;
+}
+
+h1{
+  margin:0 0 8px;
+  font-size:48px;
+  line-height:1.05;
+}
+.question{
+  font-family:"Georgia",serif;
+  font-size:36px;
+  color:#4b2f21;
+  margin:26px 0 40px;
+}
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  flex-wrap:wrap;
+}
+.btn{
+  min-width:260px;
+  padding:26px 40px;
+  border-radius:18px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  font-size:28px;
+  background:var(--btn-grad);
+  color:var(--text);
+  box-shadow:0 10px 20px rgba(91,58,46,0.08);
+  transition:transform .16s ease,box-shadow .16s ease;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.btn:active{transform:translateY(2px) scale(.98);}
+.small-note{
+  margin-top:26px;
+  font-size:18px;
+  color:#7b5b4a;
+}
+.flood{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:999;
+}
+.flower{
+  position:absolute;
+  opacity:0;
+  animation:floatUp 8s linear forwards,wobble 4s ease-in-out infinite;
+}
+@keyframes floatUp{
+  0%{transform:translateY(30vh) scale(.4) rotate(0deg);opacity:0;}
+  10%{opacity:1;}
+  100%{transform:translateY(-40vh) scale(1.05) rotate(360deg);opacity:.98;}
+}
+@keyframes wobble{
+  0%,100%{transform:translateY(0) rotate(-3deg);}
+  50%{transform:translateY(6px) rotate(3deg);}
+}
+.heart{
+  position:fixed;
+  font-size:28px;
+  opacity:0;
+  transform:translateY(0) scale(.8);
+  animation:popHeart 1.2s ease forwards;
+  pointer-events:none;
+  z-index:1200;
+}
+@keyframes popHeart{
+  0%{opacity:0;transform:translateY(10px) scale(.6);}
+  30%{opacity:1;transform:translateY(-8px) scale(1.05);}
+  100%{opacity:0;transform:translateY(-70px) scale(.8);}
+}
+
+/* Responsive for phones */
+@media(max-width:768px){
+  .card{padding:36px 28px;border-radius:20px;}
+  h1{font-size:32px;}
+  .question{font-size:22px;margin:16px 0 26px;}
+  .btn{min-width:180px;padding:16px 24px;font-size:20px;}
+}
+</style>
+</head>
+<body>
+<div class="center">
+  <div class="card">
+    <h1>A Special Question 💛</h1>
+    <div class="question">Aejaz Ur Rahaman, will you be my boyfriend?</div>
+    <div class="buttons">
+      <button class="btn yes">Yes 🌻</button>
+      <button class="btn yes">Yes 🌼</button>
+    </div>
+    <div class="small-note">Click either and watch the magic unfold ✨</div>
+  </div>
+</div>
+<div class="flood" id="flood"></div>
+
+<audio id="chime" preload="auto">
+  <source src="https://cdn.jsdelivr.net/gh/anars/blank-audio-files/chime.mp3" type="audio/mpeg">
+  <source src="https://cdn.jsdelivr.net/gh/anars/blank-audio-files/chime.ogg" type="audio/ogg">
+</audio>
+
+<script>
+const flood=document.getElementById('flood');
+const audio=document.getElementById('chime');
+let flooded=false;
+
+const sunflower=size=>`<svg viewBox="0 0 120 120" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+<defs><radialGradient id="c"><stop offset="0%" stop-color="#ffd87b"/><stop offset="100%" stop-color="#c17f00"/></radialGradient></defs>
+<g transform="translate(60,60)">
+${Array.from({length:16}).map((_,i)=>`<ellipse rx="10" ry="28" transform="rotate(${i*22.5}) translate(48,0)" fill="#f6b93b"/>`).join('')}
+<circle r="18" fill="url(#c)"/>
+</g></svg>`;
+
+const rose=size=>`<svg viewBox="0 0 120 120" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+<path d="M60 20c20-10 36 8 28 24 8-4 16 10 2 18-12 8-26 6-34-2-6 6-18 6-24-6-6-12 6-18 12-28z" fill="#ffd86b"/>
+</svg>`;
+
+function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+
+function createFlower(kind){
+  const el=document.createElement('div');
+  el.className='flower';
+  const size=rnd(50,150);
+  el.innerHTML=kind==='sun'?sunflower(size):rose(size);
+  el.style.left=rnd(-5,105)+'vw';
+  el.style.top=rnd(10,80)+'vh';
+  el.style.animationDuration=(8+Math.random()*6)+'s,'+(2+Math.random()*4)+'s';
+  return el;
+}
+
+function createHeart(x,y){
+  const h=document.createElement('div');
+  h.className='heart';
+  h.style.left=x+'px';h.style.top=y+'px';
+  h.innerHTML='💛';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),1400);
+}
+
+function floodScreen(){
+  if(flooded)return; flooded=true;
+  audio.currentTime=0; audio.play().catch(()=>{});
+  for(let i=0;i<150;i++){
+    setTimeout(()=>{
+      const f=createFlower(Math.random()<0.6?'sun':'rose');
+      flood.appendChild(f);
+      setTimeout(()=>f.remove(),18000);
+    },i*40);
+  }
+}
+
+document.querySelectorAll('.yes').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    createHeart(e.clientX,e.clientY);
+    floodScreen();
+    btn.style.transform='scale(1.05)';
+  });
+});
+</script>
+</body>
+</html>
